@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Welcome to the Blog</h1>
+    <nav>
+        <a href="/">Home</a> |
+        <a href="/about">About</a> |
+        <a href="/contact">Contact</a>
+    </nav>
+    
+    <div id="blog-posts">
+        <p>Loading posts...</p>
+    </div>
+
+    <script>
+        fetch('/api/posts')
+            .then(response => response.json())
+            .then(posts => {
+                const postsContainer = document.getElementById('blog-posts');
+                postsContainer.innerHTML = ''; // Clear loading text
+                posts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.innerHTML = `<h2>${post.title}</h2><p>${post.content}</p>`;
+                    postsContainer.appendChild(postElement);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching posts:', error);
+                document.getElementById('blog-posts').innerHTML = '<p>Failed to load posts.</p>';
+            });
+    </script>
+</body>
+</html>
